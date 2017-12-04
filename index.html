@@ -11,6 +11,7 @@
   <div id="wins"></div>
   <div id="currentWord"></div>
   <div id="numGuesses"></div>
+  <div id="announcement"></div>
   <p id="incorrectLetters"></p>
 
 
@@ -25,41 +26,47 @@
   var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
   'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
   't', 'u', 'v', 'w', 'x', 'y', 'z'];
+  var remainingGuesses = 10;
+  var countdown = document.getElementById("numGuesses");
+  var counter = 0;
+  //var spaces = 0;
+  var winning = document.getElementById("wins");
+  var goodJob = document.getElementById("announcement");
 
   for (var i = 0; i < word.length; i++){
     wordChars.push("_");
     current.innerHTML = wordChars.join(" ");
   };
-
+  countdown.innerHTML=remainingGuesses;
   document.onkeyup = function(event){
     guess = event.key;
-
     if(alphabet.indexOf(guess) <= -1){
       alert("you suck");
-    };
-      if (word.indexOf(guess)<=-1){
-        alert ("incorrect letter");
-        guesses.push(guess);
-        incorrect.innerHTML = guesses.join(" ");
-        console.log(guesses);
-      };
+    }
+    else
+    if (guesses.indexOf(guess)!=-1){
+      alert("you already guessed that");
+    }
+    else
+    if (word.indexOf(guess)<=-1){
+      alert ("incorrect letter");
+      guesses.push(guess);
+      incorrect.innerHTML = guesses.join(" ");
+      remainingGuesses -=1;
+      countdown.innerHTML = remainingGuesses;
+    }
     for(var i = 0; i<word.length; i++){
-      if (word[i]===guess){
+      if(word[i]===guess){
         wordChars[i]= guess;
         current.innerHTML = wordChars.join(" ");
-      }
-    }
-
-  };
-
-  for (var i=0; i<guesses.length; i++){
-    if (guesses[i]=guess){
-      alert("you already guessed that")
-    };
-  };
-  //  else(guess.indexOf(word)<=-1)
-  //wordChars.push(guess);
-
-  </script>
+        counter +=1;
+        //winning.innerHTML=counter;
+}
+else if(counter === word.length){
+  goodJob.innerHTML = "you won";
+}
+};
+};
+</script>
 </body>
 </html>
