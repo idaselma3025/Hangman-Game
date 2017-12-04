@@ -16,9 +16,10 @@
 
 
   <script>
+
   var words = ["banana","apple","kiwi"];
   var current =document.getElementById("currentWord");
-  var word = words[Math.floor(Math.random()*words.length)]; //Variable to hold currently selected words
+  var word;
   var guess; //Variable to hold current guess
   var guesses = []; //Variable to hold compiled guesses
   var wordChars =[];
@@ -29,16 +30,42 @@
   var remainingGuesses = 10;
   var countdown = document.getElementById("numGuesses");
   var counter = 0;
-  //var spaces = 0;
   var winning = document.getElementById("wins");
   var goodJob = document.getElementById("announcement");
+  var winsCounter = 0;
 
-  for (var i = 0; i < word.length; i++){
-    wordChars.push("_");
+  function newGame(){
+    // var output = " ";
+    // current.innerHTML = output;
+    wordBlanks();
+    remainingGuesses = 10;
+    countdown.innerHTML = remainingGuesses;
+    winning.innerHTML = winsCounter;
     current.innerHTML = wordChars.join(" ");
   };
-  countdown.innerHTML=remainingGuesses;
-  document.onkeyup = function(event){
+
+  function wordBlanks(){
+    word = words[Math.floor(Math.random()*words.length)];
+    for (var i = 0; i < word.length; i++){
+      wordChars.push("_");
+      current.innerHTML = wordChars.join(" ");
+  }
+  };
+  function scoreCard(){
+    if(counter === word.length){
+      goodJob.innerHTML = "you won";
+      winsCounter +=1;
+      // var output = " ";
+      // current.innerHTML = output;
+      newGame();
+
+    }
+    else if(remainingGuesses === 0){
+      goodJob.innerHTML= "you lost";
+    }
+  };
+
+  document.onkeyup =function(event){
     guess = event.key;
     if(alphabet.indexOf(guess) <= -1){
       alert("you suck");
@@ -52,7 +79,7 @@
       alert ("incorrect letter");
       guesses.push(guess);
       incorrect.innerHTML = guesses.join(" ");
-      remainingGuesses -=1;
+      remainingGuesses -= 1;
       countdown.innerHTML = remainingGuesses;
     }
     for(var i = 0; i<word.length; i++){
@@ -61,12 +88,14 @@
         current.innerHTML = wordChars.join(" ");
         counter +=1;
         //winning.innerHTML=counter;
-}
-else if(counter === word.length){
-  goodJob.innerHTML = "you won";
-}
-};
-};
-</script>
+      }
+    };
+    scoreCard();
+  };
+
+
+
+
+  </script>
 </body>
 </html>
