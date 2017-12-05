@@ -7,95 +7,105 @@
   <title>Question Game</title>
 </head>
 <body>
-  <div id="pressKey"></div>
-  <div id="wins"></div>
   <div id="currentWord"></div>
-  <div id="numGuesses"></div>
-  <div id="announcement"></div>
-  <p id="incorrectLetters"></p>
-
+  <div id="guessInfo"></div>
+  <div id="guessLetters"></div>
+  <div id="guessResult"></div>
+  <div id="wins"></div>
 
   <script>
-
-  var words = ["banana","apple","kiwi"];
-  var current =document.getElementById("currentWord");
-  var word;
-  var guess; //Variable to hold current guess
-  var guesses = []; //Variable to hold compiled guesses
-  var wordChars =[];
-  var incorrect = document.getElementById("incorrectLetters");
+  var word; //variable to hold selected word
+  var wordList; // array of words = ["apple","banana","orange","kiwi","starfruit"];
+  var wordBlanks; //array to hold "_" for each word;
+  var guess; // variable to hold current guessed;
+  var guessList; // variable to hold compiled guesses;
+  var guessLeft;  //variable to hold guesses used;
+  var counter;  //variable to track correct guesses;
+  var winCounter; //variable to track wins
+  var winCounterList= []; //array to track wins
+  var total; //variable to hold total wins
   var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
   'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
-  't', 'u', 'v', 'w', 'x', 'y', 'z'];
-  var remainingGuesses = 10;
-  var countdown = document.getElementById("numGuesses");
-  var counter = 0;
-  var winning = document.getElementById("wins");
-  var goodJob = document.getElementById("announcement");
-  var winsCounter = 0;
+  't', 'u', 'v', 'w', 'x', 'y', 'z']; //array of possible letter choices;
+  var guessAdd; //variable to help compare guess to word;
 
-  function newGame(){
-    // var output = " ";
-    // current.innerHTML = output;
-    wordBlanks();
-    remainingGuesses = 10;
-    countdown.innerHTML = remainingGuesses;
-    winning.innerHTML = winsCounter;
-    current.innerHTML = wordChars.join(" ");
-  };
 
-  function wordBlanks(){
-    word = words[Math.floor(Math.random()*words.length)];
+  //document.getElementById
+  var wordSpace = document.getElementById("currentWord"); //HTML to display word;
+  var guessSpace = document.getElementById("guessInfo"); //HTML to display guessesLeft;
+  var guessSpaceResult = document.getElementById("guessResult"); //HTML to display win/lose;
+  var guessLettersSpace = document.getElementById("guessLetters"); //HTML to display letters guessed;
+  var winSpace = document.getElementById("wins"); //HTML to display number of wins;
+
+
+  //function to create blank word
+  function newGame() {
+    wordList = ["carpet","kangaroo","pillow","television"];
+    word = wordList[Math.floor(Math.random() * wordList.length)];
+    wordBlanks = [];
+    guessList = [];
+    guessLeft = 10;
+    counter = 0;
     for (var i = 0; i < word.length; i++){
-      wordChars.push("_");
-      current.innerHTML = wordChars.join(" ");
-  }
-  };
-  function scoreCard(){
-    if(counter === word.length){
-      goodJob.innerHTML = "you won";
-      winsCounter +=1;
-      // var output = " ";
-      // current.innerHTML = output;
-      newGame();
-
+      wordBlanks.push("_");
+      wordSpace.innerHTML = wordBlanks.join(" ");
     }
-    else if(remainingGuesses === 0){
-      goodJob.innerHTML= "you lost";
-    }
+    guesses();
+    guessLettersSpace.innerHTML=" ";
+    guessSpaceResult.innerHTML=" ";
   };
 
-  document.onkeyup =function(event){
-    guess = event.key;
-    if(alphabet.indexOf(guess) <= -1){
-      alert("you suck");
+  //function to update <#guessInfo>
+  function guesses(){
+    winCounter = 0;
+    guessSpace.innerHTML = "You have " + guessLeft + " guesses remaining";
+    if (guessLeft<1){
+      guessSpaceResult.innerHTML = "You Lost";
     }
-    else
-    if (guesses.indexOf(guess)!=-1){
-      alert("you already guessed that");
-    }
-    else
-    if (word.indexOf(guess)<=-1){
-      alert ("incorrect letter");
-      guesses.push(guess);
-      incorrect.innerHTML = guesses.join(" ");
-      remainingGuesses -= 1;
-      countdown.innerHTML = remainingGuesses;
-    }
-    for(var i = 0; i<word.length; i++){
-      if(word[i]===guess){
-        wordChars[i]= guess;
-        current.innerHTML = wordChars.join(" ");
-        counter +=1;
-        //winning.innerHTML=counter;
+    for (var i = 0; i<word.length; i++){
+      if (counter === word.length){
+        guessSpaceResult.innerHTML="You Won";
       }
-    };
-    scoreCard();
+    }
+    if (counter === word.length){
+      winCounter +=1;
+    }
+    if (winCounter> 0){
+      winCounterList.push(winCounter);
+    }
+    total = 0;
+    for (var i in winCounterList){
+      total += winCounterList[i];
+    }
+    winSpace.innerHTML = "Win " + total;
   };
 
-
-
-
-  </script>
+  //onClick function
+  document.onkeyup = function(event){
+    guess = event.key;
+    if(alphabet.indexOf(guess)<=-1){
+      alert("Please select a lower case letter.");
+    }
+    else {
+      guessList.push(guess);
+      guessLettersSpace.innerHTML = guessList.join(" ");
+    }
+    for (var i =0; i<word.length; i++){
+      if (word[i] === guess){
+        wordBlanks[i]= guess;
+        wordSpace.innerHTML = wordBlanks.join(" ");
+        counter +=1;
+      }
+    }
+    guessAdd = (word.indexOf(guess));
+    if (guessAdd === -1){
+      guessLeft -= 1;
+      guesses();
+    }
+    else{
+      guesses();
+    }
+  }
+</script>
 </body>
 </html>
