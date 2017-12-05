@@ -83,10 +83,16 @@
   //onClick function
   document.onkeyup = function(event){
     guess = event.key;
-    if(alphabet.indexOf(guess)<=-1){
-      alert("Please select a lower case letter.");
+    if(alphabet.indexOf(guess) <= -1){
+      alert("you suck");
     }
-    else {
+    else
+    if (guessList.indexOf(guess)!=-1){
+      alert("you already guessed that");
+    }
+    else
+    if (word.indexOf(guess)<=-1){
+      alert ("incorrect letter");
       guessList.push(guess);
       guessLettersSpace.innerHTML = guessList.join(" ");
     }
