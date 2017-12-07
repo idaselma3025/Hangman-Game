@@ -20,12 +20,6 @@ var guessLettersSpace = document.getElementById("guessLetters"); //HTML to displ
 var winSpace = document.getElementById("wins"); //HTML to display number of wins;
 //function to start Game
 
-function startGame(){
-  wordSpace.innerHTML="Welcome to Hangman!  Click the 'New Game' button to get started.";
-}
-
-startGame();
-
 //function to create blank word
 function newGame() {
   wordList = ["carpet","kangaroo","pillow","television"];
@@ -33,7 +27,7 @@ function newGame() {
   wordBlanks = [];
   guessList = [];
   guessLeft = 10;
-  counter = 0;
+  counter = 0;  
   for (var i = 0; i < word.length; i++){
     wordBlanks.push("_");
     wordSpace.innerHTML = wordBlanks.join(" ");
